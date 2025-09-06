@@ -95,14 +95,10 @@ To preview the production build locally:
 npm run preview
 ```
 
-## 📄 License
-This project is licensed under the MIT License. See the LICENSE file for details.
 
-## 🤝 Contributing
-Contributions are welcome! Feel free to fork the repository and submit a pull request.
 
 ## 📧 Contact
-For any inquiries, please contact [your-email@example.com].
+For any inquiries, please contact amandeepsinghoff@gmail.com.
 
 ---
 *Happy coding! 🚗*
