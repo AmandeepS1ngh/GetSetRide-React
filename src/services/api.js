@@ -2,7 +2,11 @@
 // Centralized API configuration
 
 // Base API URL - uses environment variable or falls back to production URL
-export const API_URL = import.meta.env.VITE_API_URL || 'https://getsetride-backend.onrender.com/api';
+// In development, uses /api (proxied through Vite)
+// In production, uses full URL
+const isDevelopment = import.meta.env.DEV;
+export const API_URL = import.meta.env.VITE_API_URL || 
+  (isDevelopment ? '/api' : 'https://getsetride-backend.onrender.com/api');
 
 // Helper function to get auth headers
 export const getAuthHeaders = () => {
