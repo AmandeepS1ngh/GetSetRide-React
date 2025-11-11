@@ -1,3 +1,5 @@
+import api from './api';
+
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 // Helper function to get auth headers
@@ -11,35 +13,10 @@ const getAuthHeaders = () => {
   };
 };
 
-// Get all cars with filters
-export const getCars = async (filters = {}) => {
-  try {
-    const queryParams = new URLSearchParams();
-    
-    Object.keys(filters).forEach(key => {
-      if (filters[key]) {
-        queryParams.append(key, filters[key]);
-      }
-    });
-
-    const response = await fetch(`${API_URL}/cars?${queryParams}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || 'Failed to fetch cars');
-    }
-
-    return data;
-  } catch (error) {
-    console.error('Error fetching cars:', error);
-    throw error;
-  }
+// Get all cars
+export const getCars = async () => {
+  const response = await api.get('/cars');
+  return response.data;
 };
 
 // Get single car by ID
@@ -105,6 +82,12 @@ export const createCar = async (carData) => {
     console.error('Error creating car:', error);
     throw error;
   }
+};
+
+// Add new car
+export const addCar = async (carData) => {
+  const response = await api.post('/cars', carData);
+  return response.data;
 };
 
 // Update car
@@ -223,5 +206,6 @@ export default {
   deleteCar,
   getHostCars,
   toggleCarStatus,
-  getHostStats
+  getHostStats,
+  addCar
 };
