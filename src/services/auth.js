@@ -1,6 +1,6 @@
 // Authentication service for GetSetRide
 
-const API_URL = 'http://localhost:5000/api/auth';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 class AuthService {
   constructor() {
