@@ -1,5 +1,7 @@
 // Authentication service for GetSetRide
 
+const API_URL = 'http://localhost:5000/api/auth';
+
 class AuthService {
   constructor() {
     this.isAuthenticated = false;
@@ -7,22 +9,30 @@ class AuthService {
   }
 
   // Login method
-  async login(email, password) {
+  async login(email, password, rememberMe = false) {
     try {
-      // Simulate API call
-      const response = await this.simulateApiCall({
-        email,
-        password
+      const response = await fetch(`${API_URL}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password, rememberMe })
       });
 
-      if (response.success) {
+      const data = await response.json();
+
+      if (data.success) {
         this.isAuthenticated = true;
-        this.user = response.user;
-        localStorage.setItem('authToken', response.token);
-        localStorage.setItem('user', JSON.stringify(response.user));
-        return { success: true, user: response.user };
+        this.user = data.user;
+        localStorage.setItem('authToken', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        
+        // Dispatch custom event for other components to listen
+        window.dispatchEvent(new Event('storage'));
+        
+        return { success: true, user: data.user };
       } else {
-        throw new Error(response.message);
+        throw new Error(data.message);
       }
     } catch (error) {
       throw new Error(error.message || 'Login failed');
@@ -32,17 +42,28 @@ class AuthService {
   // Signup method
   async signup(userData) {
     try {
-      // Simulate API call
-      const response = await this.simulateApiCall(userData);
+      const response = await fetch(`${API_URL}/signup`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData)
+      });
 
-      if (response.success) {
+      const data = await response.json();
+
+      if (data.success) {
         this.isAuthenticated = true;
-        this.user = response.user;
-        localStorage.setItem('authToken', response.token);
-        localStorage.setItem('user', JSON.stringify(response.user));
-        return { success: true, user: response.user };
+        this.user = data.user;
+        localStorage.setItem('authToken', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        
+        // Dispatch custom event for other components to listen
+        window.dispatchEvent(new Event('storage'));
+        
+        return { success: true, user: data.user };
       } else {
-        throw new Error(response.message);
+        throw new Error(data.message);
       }
     } catch (error) {
       throw new Error(error.message || 'Signup failed');
@@ -55,6 +76,9 @@ class AuthService {
     this.user = null;
     localStorage.removeItem('authToken');
     localStorage.removeItem('user');
+    
+    // Dispatch custom event for other components to listen
+    window.dispatchEvent(new Event('storage'));
   }
 
   // Check if user is authenticated
@@ -73,38 +97,32 @@ class AuthService {
 
   // Get current user
   getCurrentUser() {
+    if (!this.user) {
+      const user = localStorage.getItem('user');
+      if (user) {
+        this.user = JSON.parse(user);
+      }
+    }
     return this.user;
   }
 
-  // Simulate API call (replace with actual API endpoints)
-  async simulateApiCall(data) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        // Simulate successful response
-        resolve({
-          success: true,
-          user: {
-            id: 1,
-            name: data.firstName ? `${data.firstName} ${data.lastName}` : 'John Doe',
-            email: data.email,
-            joinDate: new Date().toISOString()
-          },
-          token: 'mock-jwt-token-' + Date.now(),
-          message: 'Success'
-        });
-      }, 1000);
-    });
+  // Get token
+  getToken() {
+    return localStorage.getItem('authToken');
   }
 
-  // Password reset method
-  async resetPassword(email) {
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      return { success: true, message: 'Password reset email sent' };
-    } catch (error) {
-      throw new Error('Failed to send reset email');
-    }
+  // Check if user is logged in
+  isLoggedIn() {
+    return this.isAuthenticated;
+  }
+
+  // Update user data
+  updateUser(userData) {
+    this.user = { ...this.user, ...userData };
+    localStorage.setItem('user', JSON.stringify(this.user));
+    
+    // Dispatch custom event for other components to listen
+    window.dispatchEvent(new Event('storage'));
   }
 }
 

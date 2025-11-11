@@ -3,9 +3,13 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
-import MarketplacePage from './pages/MarketplacePage';
+import MarketplacePage from './pages/MarketplacePage_new';
 import CarDetailPage from './pages/CarDetailPage';
 import BecomeHostPage from './pages/BecomeHostPage';
+import ProfilePage from './pages/ProfilePage';
+import MyBookingsPage from './pages/MyBookingsPage';
+import MyCarsPage from './pages/MyCarsPage';
+import AddCarPage from './pages/AddCarPage';
 import Footer from './components/common/Footer';
 
 function App() {
@@ -19,6 +23,10 @@ function App() {
           <Route path="/marketplace" element={<MarketplacePage />} />
           <Route path="/car/:id" element={<CarDetailPage />} />
           <Route path="/become-host" element={<BecomeHostPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/my-bookings" element={<MyBookingsPage />} />
+          <Route path="/my-cars" element={<MyCarsPage />} />
+          <Route path="/add-car" element={<AddCarPage />} />
         </Routes>
         <Footer />
       </div>

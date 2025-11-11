@@ -1,9 +1,55 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
 
 const HomePage = () => {
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useState({
+    departure: '',
+    returnLocation: '',
+    pickupDate: '',
+    pickupTime: '',
+    returnDate: '',
+    returnTime: ''
+  });
+
+  const handleInputChange = (field, value) => {
+    setSearchParams(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    
+    console.log('Search form submitted with params:', searchParams);
+    
+    // Build query string with search parameters
+    const queryParams = new URLSearchParams();
+    
+    if (searchParams.departure && searchParams.departure.trim()) {
+      queryParams.append('city', searchParams.departure.trim());
+    }
+    if (searchParams.pickupDate) {
+      queryParams.append('pickupDate', searchParams.pickupDate);
+    }
+    if (searchParams.returnDate) {
+      queryParams.append('returnDate', searchParams.returnDate);
+    }
+    
+    // Navigate to marketplace even if no params are provided
+    const searchUrl = queryParams.toString() 
+      ? `/marketplace?${queryParams.toString()}`
+      : '/marketplace';
+    
+    console.log('Navigating to:', searchUrl);
+    
+    // Navigate to marketplace with search params
+    navigate(searchUrl);
+  };
+
   return (
     <>
       <div className="relative z-30">
@@ -36,7 +82,7 @@ const HomePage = () => {
           {/* Booking Form - Bottom Section */}
           <div className="pb-8">
             <div className="container mx-auto px-6 max-w-7xl">
-              <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-4 shadow-2xl">
+              <form onSubmit={handleSearch} className="bg-white/50 backdrop-blur-sm rounded-2xl p-4 shadow-2xl">
                 <div className="flex flex-wrap gap-4 mb-4">
                 </div>
                 
@@ -51,6 +97,8 @@ const HomePage = () => {
                       <input
                         type="text"
                         placeholder="City, airport or station"
+                        value={searchParams.departure}
+                        onChange={(e) => handleInputChange('departure', e.target.value)}
                         className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       />
                     </div>
@@ -66,6 +114,8 @@ const HomePage = () => {
                       <input
                         type="text"
                         placeholder="City, airport or station"
+                        value={searchParams.returnLocation}
+                        onChange={(e) => handleInputChange('returnLocation', e.target.value)}
                         className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       />
                     </div>
@@ -80,7 +130,8 @@ const HomePage = () => {
                       </span>
                       <input
                         type="date"
-                        defaultValue="2025-09-04"
+                        value={searchParams.pickupDate}
+                        onChange={(e) => handleInputChange('pickupDate', e.target.value)}
                         className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       />
                     </div>
@@ -95,7 +146,8 @@ const HomePage = () => {
                       </span>
                       <input
                         type="time"
-                        defaultValue="10:30"
+                        value={searchParams.pickupTime}
+                        onChange={(e) => handleInputChange('pickupTime', e.target.value)}
                         className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       />
                     </div>
@@ -104,16 +156,16 @@ const HomePage = () => {
                   {/* Search Button */}
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-700 opacity-0">Search</label>
-                    <Link
-                      to="/marketplace"
+                    <button
+                      type="submit"
                       className="w-full bg-blue-600 text-white py-3 px-6 rounded-xl font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
                     >
                       Search
                       <span className="material-icons">search</span>
-                    </Link>
+                    </button>
                   </div>
                 </div>
-              </div>
+              </form>
             </div>
           </div>
         </div>

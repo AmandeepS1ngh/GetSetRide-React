@@ -7,7 +7,7 @@ const MarketplacePage = () => {
   const [cars] = useState([
     {
       id: 1,
-      name: "Chevrolet Camaro",
+      name: "Chevorlet Camaro",
       price: 2500,
       imageUrl: "https://bringatrailer.com/wp-content/uploads/2022/08/1969_chevrolet_camaro_TED76715-36983.jpg?w=620&resize=620%2C413",
       transmission: "Manual",

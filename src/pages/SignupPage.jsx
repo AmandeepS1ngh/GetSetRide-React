@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from '../components/common/Header';
+import authService from '../services/auth';
 
 const SignupPage = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +12,8 @@ const SignupPage = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -19,26 +22,35 @@ const SignupPage = () => {
       ...prev,
       [name]: value
     }));
+    setError(''); // Clear error when user types
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     // Basic validation
     if (formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match!');
+      setError('Passwords do not match!');
       return;
     }
     
     if (formData.password.length < 6) {
-      alert('Password must be at least 6 characters long!');
+      setError('Password must be at least 6 characters long!');
       return;
     }
+
+    setLoading(true);
+    setError('');
     
-    // Handle signup logic here
-    console.log('Signup data:', formData);
-    alert('Account created successfully!');
-    navigate('/login');
+    try {
+      await authService.signup(formData);
+      alert('Account created successfully!');
+      navigate('/');
+    } catch (err) {
+      setError(err.message || 'Signup failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -51,6 +63,12 @@ const SignupPage = () => {
               <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
                 <h2 className="text-3xl font-bold text-center mb-2">Create Account</h2>
                 <p className="text-gray-500 text-center mb-8">Please fill in your details to sign up.</p>
+                
+                {error && (
+                  <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded-lg text-sm">
+                    {error}
+                  </div>
+                )}
                 
                 <form onSubmit={handleSubmit}>
                   <div className="mb-4">
@@ -161,9 +179,10 @@ const SignupPage = () => {
 
                   <button
                     type="submit"
-                    className="w-full bg-[var(--primary-color)] text-white py-3 rounded-lg font-semibold hover:bg-[var(--primary-hover-color)] transition-colors text-lg"
+                    className="w-full bg-[var(--primary-color)] text-white py-3 rounded-lg font-semibold hover:bg-[var(--primary-hover-color)] transition-colors text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={loading}
                   >
-                    Sign Up
+                    {loading ? 'Creating Account...' : 'Sign Up'}
                   </button>
                 </form>
                 

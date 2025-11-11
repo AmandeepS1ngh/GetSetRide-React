@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from '../components/common/Header';
+import authService from '../services/auth';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +10,8 @@ const LoginPage = () => {
     rememberMe: false
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -17,14 +20,23 @@ const LoginPage = () => {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
+    setError(''); // Clear error when user types
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log('Login data:', formData);
-    alert('Login successful!');
-    navigate('/');
+    setLoading(true);
+    setError('');
+
+    try {
+      await authService.login(formData.email, formData.password, formData.rememberMe);
+      alert('Login successful!');
+      navigate('/');
+    } catch (err) {
+      setError(err.message || 'Login failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -37,6 +49,12 @@ const LoginPage = () => {
               <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
                 <h2 className="text-3xl font-bold text-center mb-2">Welcome Back!</h2>
                 <p className="text-gray-500 text-center mb-8">Please enter your details to sign in.</p>
+                
+                {error && (
+                  <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded-lg text-sm">
+                    {error}
+                  </div>
+                )}
                 
                 <form onSubmit={handleSubmit}>
                   <div className="mb-4">
