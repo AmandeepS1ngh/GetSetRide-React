@@ -67,7 +67,7 @@ const Header = () => {
   };
 
   return (
-    <header className={`${isTransparent ? 'absolute top-0 left-0 right-0 z-10 bg-transparent' : 'bg-white shadow-lg shadow-gray-200/50 sticky top-0 z-50 backdrop-blur-md bg-white/95'} transition-all duration-300`}>
+    <header className={`${isTransparent ? 'absolute top-0 left-0 right-0 z-50 bg-transparent' : 'bg-white shadow-lg shadow-gray-200/50 sticky top-0 z-50 backdrop-blur-md bg-white/95'} transition-all duration-300`}>
       <div className="container mx-auto px-4 py-4 md:py-5 flex justify-between items-center">
         <h1 className="text-2xl font-black tracking-tighter hover:scale-105 transition-transform">
           <Link to="/" className={`flex items-center gap-2 ${isTransparent ? 'text-white' : 'text-blue-600'}`}>
@@ -105,8 +105,8 @@ const Header = () => {
               <button
                 onClick={() => setShowDropdown(!showDropdown)}
                 className={`flex items-center space-x-3 px-2 py-1.5 rounded-full border transition-all duration-300 ${isTransparent
-                    ? 'bg-white/10 border-white/20 text-white hover:bg-white/20'
-                    : 'bg-white border-gray-200 text-gray-700 hover:border-blue-300 hover:shadow-md'
+                  ? 'bg-white/10 border-white/20 text-white hover:bg-white/20'
+                  : 'bg-white border-gray-200 text-gray-700 hover:border-blue-300 hover:shadow-md'
                   }`}
               >
                 <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-full flex items-center justify-center font-bold text-sm shadow-sm">
@@ -173,8 +173,8 @@ const Header = () => {
             <Link
               to="/login"
               className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all shadow-lg transform hover:-translate-y-0.5 ${isTransparent
-                  ? 'bg-white text-blue-900 hover:bg-gray-100 shadow-black/20'
-                  : 'bg-blue-600 text-white hover:bg-blue-700 shadow-blue-600/30'
+                ? 'bg-white text-blue-900 hover:bg-gray-100 shadow-black/20'
+                : 'bg-blue-600 text-white hover:bg-blue-700 shadow-blue-600/30'
                 }`}
             >
               Login / Signup
