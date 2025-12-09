@@ -72,25 +72,25 @@ const Header = () => {
         <h1 className={`text-2xl font-bold ${isTransparent ? 'text-white' : 'text-[var(--primary-color)]'}`}>
           <Link to="/">GETSETRIDE</Link>
         </h1>
-        
+
         {/* Desktop Navigation */}
         <nav className={`hidden md:flex items-center space-x-8 ${isTransparent ? 'text-white' : 'text-gray-800'}`}>
           <Link className="hover:text-[var(--primary-color)] transition-colors" to="/">Home</Link>
           <Link className="hover:text-[var(--primary-color)] transition-colors" to="/marketplace">Marketplace</Link>
-          <button 
-            className="hover:text-[var(--primary-color)] transition-colors" 
+          <button
+            className="hover:text-[var(--primary-color)] transition-colors"
             onClick={() => handleSectionClick('how-it-works')}
           >
             How it Work
           </button>
-          <Link 
-            className="hover:text-[var(--primary-color)] transition-colors" 
+          <Link
+            className="hover:text-[var(--primary-color)] transition-colors"
             to="/add-car"
           >
             List Your Car
           </Link>
         </nav>
-        
+
         {/* Desktop Login Button / User Menu */}
         <div className="hidden md:block">
           {isAuthenticated && user ? (
@@ -185,17 +185,17 @@ const Header = () => {
               )}
             </div>
           ) : (
-            <Link 
-              to="/login" 
+            <Link
+              to="/login"
               className="bg-[var(--primary-color)] text-white px-6 py-2 rounded-lg font-semibold hover:bg-[var(--primary-hover-color)] transition-colors"
             >
               Login / Signup
             </Link>
           )}
         </div>
-        
+
         {/* Mobile Menu Button */}
-        <button 
+        <button
           className={`md:hidden ${isTransparent ? 'text-white' : 'text-gray-800'}`}
           onClick={toggleMobileMenu}
         >
@@ -204,20 +204,20 @@ const Header = () => {
           </span>
         </button>
       </div>
-      
+
       {/* Mobile Navigation */}
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white shadow-lg border-t">
           <nav className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-            <Link 
-              className="text-gray-800 hover:text-[var(--primary-color)] transition-colors" 
+            <Link
+              className="text-gray-800 hover:text-[var(--primary-color)] transition-colors"
               to="/"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Home
             </Link>
-            <button 
-              className="text-gray-800 hover:text-[var(--primary-color)] transition-colors text-left" 
+            <button
+              className="text-gray-800 hover:text-[var(--primary-color)] transition-colors text-left"
               onClick={() => {
                 handleSectionClick('how-it-works');
                 setIsMobileMenuOpen(false);
@@ -225,15 +225,15 @@ const Header = () => {
             >
               How it Work
             </button>
-            <Link 
-              className="text-gray-800 hover:text-[var(--primary-color)] transition-colors" 
+            <Link
+              className="text-gray-800 hover:text-[var(--primary-color)] transition-colors"
               to="/become-host"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Become a Host
             </Link>
-            <button 
-              className="text-gray-800 hover:text-[var(--primary-color)] transition-colors text-left" 
+            <button
+              className="text-gray-800 hover:text-[var(--primary-color)] transition-colors text-left"
               onClick={() => {
                 handleSectionClick('why-choose-us');
                 setIsMobileMenuOpen(false);
@@ -243,14 +243,14 @@ const Header = () => {
             </button>
             {isAuthenticated && user ? (
               <>
-                <Link 
-                  className="text-gray-800 hover:text-[var(--primary-color)] transition-colors" 
+                <Link
+                  className="text-gray-800 hover:text-[var(--primary-color)] transition-colors"
                   to="/profile"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   My Profile
                 </Link>
-                <button 
+                <button
                   className="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors text-center"
                   onClick={() => {
                     handleLogout();
@@ -261,8 +261,8 @@ const Header = () => {
                 </button>
               </>
             ) : (
-              <Link 
-                to="/login" 
+              <Link
+                to="/login"
                 className="bg-[var(--primary-color)] text-white px-6 py-2 rounded-lg font-semibold hover:bg-[var(--primary-hover-color)] transition-colors text-center"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
