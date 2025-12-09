@@ -10,6 +10,7 @@ import ProfilePage from './pages/ProfilePage';
 import MyBookingsPage from './pages/MyBookingsPage';
 import MyCarsPage from './pages/MyCarsPage';
 import AddCarPage from './pages/AddCarPage';
+import EditCarPage from './pages/EditCarPage';
 import DebugPage from './pages/DebugPage';
 import Footer from './components/common/Footer';
 
@@ -28,6 +29,7 @@ function App() {
           <Route path="/my-bookings" element={<MyBookingsPage />} />
           <Route path="/my-cars" element={<MyCarsPage />} />
           <Route path="/add-car" element={<AddCarPage />} />
+          <Route path="/edit-car/:id" element={<EditCarPage />} />
           <Route path="/debug" element={<DebugPage />} />
         </Routes>
         <Footer />
