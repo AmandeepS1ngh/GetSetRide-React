@@ -33,9 +33,9 @@ const MarketplacePage = () => {
     const urlCity = searchParams.get('city');
     const urlPickupDate = searchParams.get('pickupDate');
     const urlReturnDate = searchParams.get('returnDate');
-    
+
     console.log('URL Search Params:', { urlCity, urlPickupDate, urlReturnDate });
-    
+
     if (urlCity || urlPickupDate || urlReturnDate) {
       console.log('Setting filters from URL');
       setFilters(prev => ({
@@ -107,26 +107,26 @@ const MarketplacePage = () => {
   };
 
   return (
-    <>
+    <div className="min-h-screen bg-gray-50 font-sans flex flex-col">
       <Header />
-      <main className="container mx-auto px-4 py-8">
-        {/* Search Section */}
-        <section className="bg-white p-6 rounded-lg shadow-md mb-8">
-          <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-center">
-            <div className="relative">
-              <span className="material-icons absolute top-3 left-3 text-gray-400">location_on</span>
+      <main className="container mx-auto px-4 py-8 flex-grow">
+        {/* Search & Filter Header - Now cleaner */}
+        <section className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-8 sticky top-24 z-10">
+          <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 items-center">
+            <div className="lg:col-span-4 relative group">
+              <span className="material-icons absolute top-3.5 left-4 text-gray-400 group-focus-within:text-blue-600 transition-colors">location_on</span>
               <input
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+                className="w-full pl-12 pr-4 py-3 bg-gray-50 border-transparent rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium"
                 placeholder="City"
                 type="text"
                 value={filters.city}
                 onChange={(e) => handleFilterChange('city', e.target.value)}
               />
             </div>
-            <div className="relative">
-              <span className="material-icons absolute top-3 left-3 text-gray-400">directions_car</span>
+            <div className="lg:col-span-3 relative group">
+              <span className="material-icons absolute top-3.5 left-4 text-gray-400 group-focus-within:text-blue-600 transition-colors">directions_car</span>
               <select
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+                className="w-full pl-12 pr-4 py-3 bg-gray-50 border-transparent rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium appearance-none"
                 value={filters.category}
                 onChange={(e) => handleFilterChange('category', e.target.value)}
               >
@@ -138,54 +138,62 @@ const MarketplacePage = () => {
                 <option value="Sports">Sports</option>
                 <option value="Electric">Electric</option>
               </select>
+              <span className="material-icons absolute top-3.5 right-4 text-gray-400 pointer-events-none">expand_more</span>
             </div>
-            <div className="relative col-span-1 lg:col-span-1">
-              <span className="material-icons absolute top-3 left-3 text-gray-400">search</span>
+            <div className="lg:col-span-3 relative group">
+              <span className="material-icons absolute top-3.5 left-4 text-gray-400 group-focus-within:text-blue-600 transition-colors">search</span>
               <input
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+                className="w-full pl-12 pr-4 py-3 bg-gray-50 border-transparent rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium"
                 placeholder="Search cars..."
                 type="text"
                 value={filters.search}
                 onChange={(e) => handleFilterChange('search', e.target.value)}
               />
             </div>
-            <button
-              type="submit"
-              className="w-full bg-[var(--primary-color)] text-white py-2.5 rounded-lg font-semibold hover:bg-[var(--primary-hover-color)] transition-colors">
-              Search
-            </button>
+            <div className="lg:col-span-2">
+              <button
+                type="submit"
+                className="w-full bg-blue-600 text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-600/30 hover:bg-blue-700 hover:shadow-blue-600/40 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                Search
+              </button>
+            </div>
           </form>
         </section>
 
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-8 items-start">
           {/* Sidebar Filters */}
-          <aside className="w-full lg:w-1/4">
-            <div className="bg-white p-6 rounded-lg shadow-md">
+          <aside className="w-full lg:w-1/4 sticky top-24">
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-lg font-semibold">Filters</h3>
-                <button 
+                <h3 className="text-lg font-bold text-gray-900">Filters</h3>
+                <button
                   onClick={clearFilters}
-                  className="text-[var(--primary-color)] text-sm hover:underline">
-                  Clear All
+                  className="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline">
+                  Reset
                 </button>
               </div>
-              <div className="space-y-6">
+
+              <div className="space-y-8">
                 {/* Price Range */}
                 <div>
-                  <h4 className="font-medium mb-3">Price Range (₹/day)</h4>
-                  <div className="space-y-2">
-                    <div className="grid grid-cols-2 gap-2">
+                  <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-3">Daily Price</h4>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="relative">
+                      <span className="absolute left-3 top-2.5 text-gray-400 text-sm">₹</span>
                       <input
                         type="number"
                         placeholder="Min"
-                        className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+                        className="w-full pl-7 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         value={filters.minPrice}
                         onChange={(e) => handleFilterChange('minPrice', e.target.value)}
                       />
+                    </div>
+                    <div className="relative">
+                      <span className="absolute left-3 top-2.5 text-gray-400 text-sm">₹</span>
                       <input
                         type="number"
                         placeholder="Max"
-                        className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+                        className="w-full pl-7 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         value={filters.maxPrice}
                         onChange={(e) => handleFilterChange('maxPrice', e.target.value)}
                       />
@@ -195,54 +203,45 @@ const MarketplacePage = () => {
 
                 {/* Transmission */}
                 <div>
-                  <h4 className="font-medium mb-3">Transmission</h4>
+                  <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-3">Transmission</h4>
                   <div className="space-y-2">
-                    <label className="flex items-center cursor-pointer">
-                      <input 
-                        type="radio" 
-                        name="transmission" 
-                        className="mr-2"
-                        checked={filters.transmission === ''}
-                        onChange={() => handleFilterChange('transmission', '')}
-                      />
-                      <span className="text-sm">All</span>
-                    </label>
-                    <label className="flex items-center cursor-pointer">
-                      <input 
-                        type="radio" 
-                        name="transmission" 
-                        className="mr-2"
-                        checked={filters.transmission === 'Automatic'}
-                        onChange={() => handleFilterChange('transmission', 'Automatic')}
-                      />
-                      <span className="text-sm">Automatic</span>
-                    </label>
-                    <label className="flex items-center cursor-pointer">
-                      <input 
-                        type="radio" 
-                        name="transmission" 
-                        className="mr-2"
-                        checked={filters.transmission === 'Manual'}
-                        onChange={() => handleFilterChange('transmission', 'Manual')}
-                      />
-                      <span className="text-sm">Manual</span>
-                    </label>
+                    {['', 'Automatic', 'Manual'].map((type) => (
+                      <label key={type} className="flex items-center cursor-pointer group">
+                        <div className="relative flex items-center">
+                          <input
+                            type="radio"
+                            name="transmission"
+                            className="peer h-4 w-4 cursor-pointer appearance-none rounded-full border border-gray-300 checked:border-blue-600 checked:bg-blue-600 transition-all"
+                            checked={filters.transmission === type}
+                            onChange={() => handleFilterChange('transmission', type)}
+                          />
+                          <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 peer-checked:opacity-100">
+                            <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <circle cx="4" cy="4" r="2" fill="white" />
+                            </svg>
+                          </div>
+                        </div>
+                        <span className="ml-3 text-sm text-gray-600 group-hover:text-gray-900 transition-colors">
+                          {type === '' ? 'Any Transmission' : type}
+                        </span>
+                      </label>
+                    ))}
                   </div>
                 </div>
 
                 {/* Seats */}
                 <div>
-                  <h4 className="font-medium mb-3">Seats</h4>
+                  <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-3">Seats</h4>
                   <select
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+                    className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
                     value={filters.seats}
                     onChange={(e) => handleFilterChange('seats', e.target.value)}
                   >
-                    <option value="">Any</option>
-                    <option value="2">2+</option>
-                    <option value="4">4+</option>
-                    <option value="5">5+</option>
-                    <option value="7">7+</option>
+                    <option value="">Any Number</option>
+                    <option value="2">2+ Seats</option>
+                    <option value="4">4+ Seats</option>
+                    <option value="5">5+ Seats</option>
+                    <option value="7">7+ Seats</option>
                   </select>
                 </div>
               </div>
@@ -251,40 +250,43 @@ const MarketplacePage = () => {
 
           {/* Main Content */}
           <div className="w-full lg:w-3/4">
-            <div className="flex justify-between items-center mb-6">
-              <p className="text-gray-600">
-                {loading ? 'Loading...' : `Showing ${cars.length} of ${pagination.total} results`}
+            <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+              <p className="text-gray-600 font-medium">
+                {loading ? 'Searching...' : <><span className="text-gray-900 font-bold">{cars.length}</span> cars available</>}
               </p>
               <div className="relative">
-                <select 
-                  className="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+                <select
+                  className="appearance-none bg-gray-50 border-0 rounded-lg pl-4 pr-10 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer hover:bg-gray-100 transition-colors"
                   onChange={(e) => handleFilterChange('sort', e.target.value)}
                   value={filters.sort}
                 >
-                  <option value="-createdAt">Sort by: Newest</option>
-                  <option value="pricePerDay">Sort by: Price (Low to High)</option>
-                  <option value="-pricePerDay">Sort by: Price (High to Low)</option>
-                  <option value="-rating.average">Sort by: Rating</option>
+                  <option value="-createdAt">Newest First</option>
+                  <option value="pricePerDay">Price: Low to High</option>
+                  <option value="-pricePerDay">Price: High to Low</option>
+                  <option value="-rating.average">Highest Rated</option>
                 </select>
-                <span className="material-icons absolute right-2 top-2 text-gray-400 pointer-events-none">expand_more</span>
+                <span className="material-icons absolute right-2 top-2 text-gray-500 pointer-events-none">expand_more</span>
               </div>
             </div>
 
             {/* Loading State */}
             {loading && (
-              <div className="flex justify-center items-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--primary-color)]"></div>
+              <div className="flex justify-center items-center py-32">
+                <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-t-blue-600"></div>
               </div>
             )}
 
             {/* Error State */}
             {error && !loading && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-                <span className="material-icons text-red-500 text-5xl mb-2">error_outline</span>
-                <p className="text-red-600 font-medium">{error}</p>
+              <div className="bg-red-50 border border-red-100 rounded-2xl p-8 text-center max-w-lg mx-auto mt-10">
+                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="material-icons text-red-500 text-3xl">error_outline</span>
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">Something went wrong</h3>
+                <p className="text-red-600 mb-6">{error}</p>
                 <button
                   onClick={fetchCars}
-                  className="mt-4 px-6 py-2 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--primary-hover-color)] transition-colors"
+                  className="px-6 py-2.5 bg-red-600 text-white rounded-xl font-semibold hover:bg-red-700 transition-colors shadow-lg shadow-red-600/20"
                 >
                   Try Again
                 </button>
@@ -293,15 +295,17 @@ const MarketplacePage = () => {
 
             {/* Empty State */}
             {!loading && !error && cars.length === 0 && (
-              <div className="bg-gray-50 border border-gray-200 rounded-lg p-12 text-center">
-                <span className="material-icons text-gray-400 text-6xl mb-4">directions_car</span>
-                <h3 className="text-xl font-semibold text-gray-700 mb-2">No cars found</h3>
-                <p className="text-gray-500 mb-6">Try adjusting your filters or search criteria</p>
+              <div className="bg-white rounded-2xl p-12 text-center border border-dashed border-gray-300">
+                <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <span className="material-icons text-gray-400 text-4xl">directions_car</span>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">No cars found</h3>
+                <p className="text-gray-500 mb-8 max-w-sm mx-auto">We couldn't find any cars matching your current filters. Try adjusting your search criteria.</p>
                 <button
                   onClick={clearFilters}
-                  className="px-6 py-2 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--primary-hover-color)] transition-colors"
+                  className="px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/25"
                 >
-                  Clear Filters
+                  Clear All Filters
                 </button>
               </div>
             )}
@@ -317,54 +321,38 @@ const MarketplacePage = () => {
 
                 {/* Pagination */}
                 {pagination.totalPages > 1 && (
-                  <div className="mt-8 flex justify-center items-center space-x-2">
-                    <button 
-                      className="p-2 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" 
+                  <div className="mt-12 flex justify-center items-center gap-2">
+                    <button
+                      className="w-10 h-10 rounded-lg flex items-center justify-center border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-white"
                       disabled={pagination.currentPage === 1}
                       onClick={() => handlePageChange(pagination.currentPage - 1)}
                     >
-                      <span className="material-icons">chevron_left</span>
+                      <span className="material-icons text-gray-600">chevron_left</span>
                     </button>
-                    
+
                     {[...Array(Math.min(5, pagination.totalPages))].map((_, idx) => {
                       const pageNum = idx + 1;
+                      // Logic for showing pages could be more complex, but simplified here
                       return (
-                        <button 
+                        <button
                           key={pageNum}
-                          className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
-                            pagination.currentPage === pageNum 
-                              ? 'bg-[var(--primary-color)] text-white' 
-                              : 'hover:bg-gray-200'
-                          }`}
+                          className={`w-10 h-10 rounded-lg font-bold text-sm transition-all ${pagination.currentPage === pageNum
+                              ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                              : 'bg-white border border-gray-200 hover:bg-gray-50 text-gray-700'
+                            }`}
                           onClick={() => handlePageChange(pageNum)}
                         >
                           {pageNum}
                         </button>
                       );
                     })}
-                    
-                    {pagination.totalPages > 5 && (
-                      <>
-                        <span>...</span>
-                        <button 
-                          className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
-                            pagination.currentPage === pagination.totalPages 
-                              ? 'bg-[var(--primary-color)] text-white' 
-                              : 'hover:bg-gray-200'
-                          }`}
-                          onClick={() => handlePageChange(pagination.totalPages)}
-                        >
-                          {pagination.totalPages}
-                        </button>
-                      </>
-                    )}
-                    
-                    <button 
-                      className="p-2 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+
+                    <button
+                      className="w-10 h-10 rounded-lg flex items-center justify-center border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-white"
                       disabled={pagination.currentPage === pagination.totalPages}
                       onClick={() => handlePageChange(pagination.currentPage + 1)}
                     >
-                      <span className="material-icons">chevron_right</span>
+                      <span className="material-icons text-gray-600">chevron_right</span>
                     </button>
                   </div>
                 )}
@@ -373,7 +361,7 @@ const MarketplacePage = () => {
           </div>
         </div>
       </main>
-    </>
+    </div>
   );
 };
 

@@ -80,7 +80,7 @@ const ProfilePage = () => {
         setUser(data.user);
         setIsEditing(false);
         setMessage({ type: 'success', text: 'Profile updated successfully!' });
-        
+
         // Update local storage
         authService.updateUser({ name: data.user.name, phone: data.user.phone });
       } else {
@@ -139,183 +139,199 @@ const ProfilePage = () => {
   }
 
   return (
-    <>
+    <div className="min-h-screen bg-gray-50 font-sans">
       <Header />
-      <div className="min-h-screen bg-gray-50 py-12">
+      <main className="py-12 pb-20">
         <div className="container mx-auto px-4 max-w-4xl">
           {/* Header */}
-          <div className="bg-white rounded-lg shadow-md p-8 mb-6">
-            <div className="flex items-center space-x-6">
-              <div className="w-24 h-24 bg-[var(--primary-color)] text-white rounded-full flex items-center justify-center text-3xl font-bold">
-                {getInitials(user.name)}
-              </div>
-              <div className="flex-1">
-                <h1 className="text-3xl font-bold text-gray-800">{user.name}</h1>
-                <p className="text-gray-600">{user.email}</p>
-                <div className="mt-2 flex items-center space-x-4 text-sm text-gray-500">
-                  <span className="flex items-center">
-                    <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Joined {formatDate(user.joinDate)}
-                  </span>
-                  <span className="flex items-center">
-                    <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
-                    {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
-                  </span>
+          <div className="bg-white rounded-3xl shadow-xl overflow-hidden mb-8 border border-gray-100">
+            <div className="h-32 bg-gradient-to-r from-blue-600 to-indigo-700"></div>
+            <div className="px-8 pb-8">
+              <div className="relative flex items-end -mt-16 mb-6">
+                <div className="w-32 h-32 bg-white p-1 rounded-full shadow-lg">
+                  <div className="w-full h-full bg-gray-100 text-blue-600 rounded-full flex items-center justify-center text-4xl font-bold border-4 border-white">
+                    {getInitials(user.name)}
+                  </div>
                 </div>
+                <div className="ml-6 mb-2 flex-1">
+                  <h1 className="text-3xl font-bold text-gray-900">{user.name}</h1>
+                  <div className="flex items-center gap-4 mt-1">
+                    <p className="text-gray-600 font-medium">{user.email}</p>
+                    <span className="bg-blue-100 text-blue-700 text-xs font-bold px-2 py-0.5 rounded-full capitalize border border-blue-200">
+                      {user.role}
+                    </span>
+                  </div>
+                </div>
+                {!isEditing && (
+                  <button
+                    onClick={() => setIsEditing(true)}
+                    className="mb-4 px-6 py-2.5 bg-blue-600 text-white rounded-xl font-bold shadow-lg shadow-blue-600/20 hover:bg-blue-700 hover:shadow-blue-600/30 transition-all transform hover:-translate-y-0.5 flex items-center gap-2"
+                  >
+                    <span className="material-icons text-sm">edit</span>
+                    Edit Profile
+                  </button>
+                )}
               </div>
-              {!isEditing && (
-                <button
-                  onClick={() => setIsEditing(true)}
-                  className="px-6 py-2 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--primary-hover-color)] transition"
-                >
-                  Edit Profile
-                </button>
-              )}
+
+              <div className="flex items-center gap-6 text-sm text-gray-500 border-t border-gray-100 pt-6">
+                <span className="flex items-center gap-2">
+                  <span className="material-icons text-gray-400">calendar_today</span>
+                  Joined {formatDate(user.joinDate)}
+                </span>
+                <span className="flex items-center gap-2">
+                  <span className="material-icons text-gray-400">verified_user</span>
+                  Email Verified
+                </span>
+              </div>
             </div>
           </div>
 
           {/* Alert Messages */}
           {message.text && (
-            <div className={`mb-6 p-4 rounded-lg ${
-              message.type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' : 
-              'bg-red-50 text-red-800 border border-red-200'
-            }`}>
-              <div className="flex items-center">
-                {message.type === 'success' ? (
-                  <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                ) : (
-                  <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                  </svg>
-                )}
-                {message.text}
-              </div>
+            <div className={`mb-8 p-4 rounded-xl flex items-center gap-3 shadow-sm ${message.type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' :
+                'bg-red-50 text-red-800 border border-red-200'
+              }`}>
+              <span className="material-icons">{message.type === 'success' ? 'check_circle' : 'error'}</span>
+              <span className="font-medium">{message.text}</span>
             </div>
           )}
 
-          {/* Profile Information */}
-          <div className="bg-white rounded-lg shadow-md p-8">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-6">Profile Information</h2>
-            
-            {isEditing ? (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Full Name
-                  </label>
-                  <input
-                    type="text"
-                    name="fullName"
-                    value={formData.fullName}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] focus:border-transparent"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 cursor-not-allowed"
-                    disabled
-                  />
-                  <p className="mt-1 text-sm text-gray-500">Email cannot be changed</p>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Phone Number
-                  </label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    placeholder="Enter your phone number"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] focus:border-transparent"
-                  />
-                </div>
-
-                <div className="flex space-x-4">
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="px-6 py-2 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--primary-hover-color)] transition disabled:bg-gray-400"
-                  >
-                    {loading ? 'Saving...' : 'Save Changes'}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsEditing(false);
-                      setFormData({
-                        fullName: user.name,
-                        email: user.email,
-                        phone: user.phone || ''
-                      });
-                      setMessage({ type: '', text: '' });
-                    }}
-                    className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            ) : (
-              <div className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-500 mb-1">Full Name</label>
-                    <p className="text-lg text-gray-800">{user.name}</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Left Column: Account Stats */}
+            <div className="md:col-span-1 space-y-6">
+              <div className="bg-white rounded-3xl shadow-xl p-6 border border-gray-100">
+                <h3 className="text-lg font-bold text-gray-900 mb-4">Stats</h3>
+                <div className="space-y-4">
+                  <div className="bg-gray-50 rounded-2xl p-4 border border-gray-100">
+                    <p className="text-gray-500 text-sm font-medium mb-1">Total Bookings</p>
+                    <p className="text-2xl font-bold text-gray-900">0</p>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-500 mb-1">Email</label>
-                    <p className="text-lg text-gray-800">{user.email}</p>
+                  <div className="bg-gray-50 rounded-2xl p-4 border border-gray-100">
+                    <p className="text-gray-500 text-sm font-medium mb-1">Completed Trips</p>
+                    <p className="text-2xl font-bold text-green-600">0</p>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-500 mb-1">Phone Number</label>
-                    <p className="text-lg text-gray-800">{user.phone || 'Not provided'}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-500 mb-1">Account Type</label>
-                    <p className="text-lg text-gray-800 capitalize">{user.role}</p>
+                  <div className="bg-gray-50 rounded-2xl p-4 border border-gray-100">
+                    <p className="text-gray-500 text-sm font-medium mb-1">Cars Listed</p>
+                    <p className="text-2xl font-bold text-purple-600">{user.role === 'host' ? '0' : 'N/A'}</p>
                   </div>
                 </div>
               </div>
-            )}
-          </div>
+            </div>
 
-          {/* Account Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-            <div className="bg-white rounded-lg shadow-md p-6 text-center">
-              <div className="text-3xl font-bold text-[var(--primary-color)]">0</div>
-              <div className="text-gray-600 mt-2">Total Bookings</div>
-            </div>
-            <div className="bg-white rounded-lg shadow-md p-6 text-center">
-              <div className="text-3xl font-bold text-green-600">0</div>
-              <div className="text-gray-600 mt-2">Completed Trips</div>
-            </div>
-            <div className="bg-white rounded-lg shadow-md p-6 text-center">
-              <div className="text-3xl font-bold text-purple-600">
-                {user.role === 'host' ? '0' : 'N/A'}
+            {/* Right Column: Profile Form */}
+            <div className="md:col-span-2">
+              <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
+                <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                  <span className="material-icons text-blue-600">person</span>
+                  Profile Information
+                </h2>
+
+                {isEditing ? (
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <div>
+                      <label className="block text-sm font-bold text-gray-900 mb-2">
+                        Full Name
+                      </label>
+                      <input
+                        type="text"
+                        name="fullName"
+                        value={formData.fullName}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 bg-gray-50 border-transparent rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-bold text-gray-900 mb-2">
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        className="w-full px-4 py-3 bg-gray-100 border-transparent rounded-xl text-gray-500 cursor-not-allowed font-medium"
+                        disabled
+                      />
+                      <p className="mt-2 text-xs text-gray-500 flex items-center gap-1">
+                        <span className="material-icons text-xs">lock</span>
+                        Email cannot be changed
+                      </p>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-bold text-gray-900 mb-2">
+                        Phone Number
+                      </label>
+                      <div className="relative group">
+                        <span className="material-icons absolute left-4 top-3.5 text-gray-400">phone</span>
+                        <input
+                          type="tel"
+                          name="phone"
+                          value={formData.phone}
+                          onChange={handleInputChange}
+                          placeholder="Enter your phone number"
+                          className="w-full pl-12 pr-4 py-3 bg-gray-50 border-transparent rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex space-x-4 pt-4">
+                      <button
+                        type="submit"
+                        disabled={loading}
+                        className="px-8 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 shadow-lg shadow-blue-600/30 transition-all transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed"
+                      >
+                        {loading ? 'Saving...' : 'Save Changes'}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsEditing(false);
+                          setFormData({
+                            fullName: user.name,
+                            email: user.email,
+                            phone: user.phone || ''
+                          });
+                          setMessage({ type: '', text: '' });
+                        }}
+                        className="px-8 py-3 bg-gray-100 text-gray-700 rounded-xl font-bold hover:bg-gray-200 transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  <div className="space-y-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div>
+                        <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Full Name</label>
+                        <p className="text-lg font-bold text-gray-900">{user.name}</p>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Email</label>
+                        <p className="text-lg font-medium text-gray-900">{user.email}</p>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Phone Number</label>
+                        <p className="text-lg font-medium text-gray-900">{user.phone || 'Not provided'}</p>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Account Type</label>
+                        <p className="text-lg font-medium text-gray-900 capitalize flex items-center gap-2">
+                          {user.role}
+                          {user.role === 'host' && <span className="material-icons text-blue-500 text-sm">verified</span>}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
-              <div className="text-gray-600 mt-2">Cars Listed</div>
             </div>
           </div>
         </div>
-      </div>
-    </>
+      </main>
+    </div>
   );
 };
 

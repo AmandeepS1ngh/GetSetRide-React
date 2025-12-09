@@ -17,7 +17,7 @@ const DebugPage = () => {
         <p><strong>import.meta.env.PROD:</strong> {String(prod)}</p>
         <p><strong>import.meta.env.MODE:</strong> {mode}</p>
       </div>
-      
+
       <div style={{ background: '#ffe0e0', padding: '20px', marginTop: '20px' }}>
         <h2>Computed API URL:</h2>
         <p><strong>Will use:</strong> {apiUrl || (isDev ? '/api' : 'https://getsetride-backend.onrender.com/api')}</p>

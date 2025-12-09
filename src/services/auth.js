@@ -26,10 +26,10 @@ class AuthService {
         this.user = data.user;
         localStorage.setItem('authToken', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
-        
+
         // Dispatch custom event for other components to listen
         window.dispatchEvent(new Event('storage'));
-        
+
         return { success: true, user: data.user };
       } else {
         throw new Error(data.message);
@@ -57,10 +57,10 @@ class AuthService {
         this.user = data.user;
         localStorage.setItem('authToken', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
-        
+
         // Dispatch custom event for other components to listen
         window.dispatchEvent(new Event('storage'));
-        
+
         return { success: true, user: data.user };
       } else {
         throw new Error(data.message);
@@ -76,7 +76,7 @@ class AuthService {
     this.user = null;
     localStorage.removeItem('authToken');
     localStorage.removeItem('user');
-    
+
     // Dispatch custom event for other components to listen
     window.dispatchEvent(new Event('storage'));
   }
@@ -85,13 +85,13 @@ class AuthService {
   checkAuth() {
     const token = localStorage.getItem('authToken');
     const user = localStorage.getItem('user');
-    
+
     if (token && user) {
       this.isAuthenticated = true;
       this.user = JSON.parse(user);
       return true;
     }
-    
+
     return false;
   }
 
@@ -120,7 +120,7 @@ class AuthService {
   updateUser(userData) {
     this.user = { ...this.user, ...userData };
     localStorage.setItem('user', JSON.stringify(this.user));
-    
+
     // Dispatch custom event for other components to listen
     window.dispatchEvent(new Event('storage'));
   }

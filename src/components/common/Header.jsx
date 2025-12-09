@@ -67,24 +67,31 @@ const Header = () => {
   };
 
   return (
-    <header className={`${isTransparent ? 'absolute top-0 left-0 right-0 z-10 bg-transparent' : 'bg-white shadow-md sticky top-0 z-20'} transition-all duration-300`}>
-      <div className="container mx-auto px-4 py-6 flex justify-between items-center">
-        <h1 className={`text-2xl font-bold ${isTransparent ? 'text-white' : 'text-[var(--primary-color)]'}`}>
-          <Link to="/">GETSETRIDE</Link>
+    <header className={`${isTransparent ? 'absolute top-0 left-0 right-0 z-10 bg-transparent' : 'bg-white shadow-lg shadow-gray-200/50 sticky top-0 z-50 backdrop-blur-md bg-white/95'} transition-all duration-300`}>
+      <div className="container mx-auto px-4 py-4 md:py-5 flex justify-between items-center">
+        <h1 className="text-2xl font-black tracking-tighter hover:scale-105 transition-transform">
+          <Link to="/" className={`flex items-center gap-2 ${isTransparent ? 'text-white' : 'text-blue-600'}`}>
+            <span className="material-icons text-3xl">directions_car</span>
+            <span>GETSETRIDE</span>
+          </Link>
         </h1>
 
         {/* Desktop Navigation */}
-        <nav className={`hidden md:flex items-center space-x-8 ${isTransparent ? 'text-white' : 'text-gray-800'}`}>
-          <Link className="hover:text-[var(--primary-color)] transition-colors" to="/">Home</Link>
-          <Link className="hover:text-[var(--primary-color)] transition-colors" to="/marketplace">Marketplace</Link>
+        <nav className={`hidden md:flex items-center space-x-1 font-medium ${isTransparent ? 'text-white' : 'text-gray-600'}`}>
+          <Link className={`px-4 py-2 rounded-full hover:bg-black/10 transition-all ${isTransparent ? 'hover:text-white' : 'hover:text-blue-600 hover:bg-blue-50'}`} to="/">
+            Home
+          </Link>
+          <Link className={`px-4 py-2 rounded-full hover:bg-black/10 transition-all ${isTransparent ? 'hover:text-white' : 'hover:text-blue-600 hover:bg-blue-50'}`} to="/marketplace">
+            Marketplace
+          </Link>
           <button
-            className="hover:text-[var(--primary-color)] transition-colors"
+            className={`px-4 py-2 rounded-full hover:bg-black/10 transition-all ${isTransparent ? 'hover:text-white' : 'hover:text-blue-600 hover:bg-blue-50'}`}
             onClick={() => handleSectionClick('how-it-works')}
           >
-            How it Work
+            How it Works
           </button>
           <Link
-            className="hover:text-[var(--primary-color)] transition-colors"
+            className={`px-4 py-2 rounded-full hover:bg-black/10 transition-all ${isTransparent ? 'hover:text-white' : 'hover:text-blue-600 hover:bg-blue-50'}`}
             to="/add-car"
           >
             List Your Car
@@ -97,88 +104,66 @@ const Header = () => {
             <div className="relative">
               <button
                 onClick={() => setShowDropdown(!showDropdown)}
-                className={`flex items-center space-x-2 ${isTransparent ? 'text-white' : 'text-gray-800'} hover:text-[var(--primary-color)] transition-colors focus:outline-none`}
+                className={`flex items-center space-x-3 px-2 py-1.5 rounded-full border transition-all duration-300 ${isTransparent
+                    ? 'bg-white/10 border-white/20 text-white hover:bg-white/20'
+                    : 'bg-white border-gray-200 text-gray-700 hover:border-blue-300 hover:shadow-md'
+                  }`}
               >
-                <div className="w-10 h-10 bg-[var(--primary-color)] text-white rounded-full flex items-center justify-center font-semibold">
+                <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-full flex items-center justify-center font-bold text-sm shadow-sm">
                   {getInitials(user.name)}
                 </div>
-                <span className="font-medium">{user.name}</span>
-                <svg
-                  className={`w-4 h-4 transition-transform ${showDropdown ? 'rotate-180' : ''}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
+                <span className="font-semibold text-sm pr-2">{user.name}</span>
+                <span className={`material-icons text-lg transition-transform duration-300 ${showDropdown ? 'rotate-180' : ''}`}>expand_more</span>
               </button>
 
               {/* Dropdown Menu */}
               {showDropdown && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
-                  <div className="px-4 py-2 border-b border-gray-200">
-                    <p className="text-sm font-semibold text-gray-800">{user.name}</p>
-                    <p className="text-xs text-gray-500">{user.email}</p>
+                <div className="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-xl py-3 z-50 border border-gray-100 transform origin-top-right transition-all">
+                  <div className="px-6 py-4 border-b border-gray-100 bg-gray-50/50 rounded-t-2xl">
+                    <p className="text-sm font-bold text-gray-900">{user.name}</p>
+                    <p className="text-xs text-gray-500 font-medium truncate">{user.email}</p>
                   </div>
-                  <Link
-                    to="/profile"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition"
-                    onClick={() => setShowDropdown(false)}
-                  >
-                    <div className="flex items-center space-x-2">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                      </svg>
-                      <span>My Profile</span>
-                    </div>
-                  </Link>
-                  <Link
-                    to="/my-bookings"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition"
-                    onClick={() => setShowDropdown(false)}
-                  >
-                    <div className="flex items-center space-x-2">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                      </svg>
-                      <span>My Bookings</span>
-                    </div>
-                  </Link>
-                  <Link
-                    to="/add-car"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition"
-                    onClick={() => setShowDropdown(false)}
-                  >
-                    <div className="flex items-center space-x-2">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                      </svg>
-                      <span>List Your Car</span>
-                    </div>
-                  </Link>
-                  <Link
-                    to="/my-cars"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition"
-                    onClick={() => setShowDropdown(false)}
-                  >
-                    <div className="flex items-center space-x-2">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                      </svg>
-                      <span>My Cars</span>
-                    </div>
-                  </Link>
-                  <div className="border-t border-gray-200 mt-2 pt-2">
+                  <div className="p-2 space-y-1">
+                    <Link
+                      to="/profile"
+                      className="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all"
+                      onClick={() => setShowDropdown(false)}
+                    >
+                      <span className="material-icons text-xl">person</span>
+                      <span className="font-medium text-sm">My Profile</span>
+                    </Link>
+                    <Link
+                      to="/my-bookings"
+                      className="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all"
+                      onClick={() => setShowDropdown(false)}
+                    >
+                      <span className="material-icons text-xl">history</span>
+                      <span className="font-medium text-sm">My Bookings</span>
+                    </Link>
+                    <Link
+                      to="/add-car"
+                      className="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all"
+                      onClick={() => setShowDropdown(false)}
+                    >
+                      <span className="material-icons text-xl">add_circle</span>
+                      <span className="font-medium text-sm">List Your Car</span>
+                    </Link>
+                    <Link
+                      to="/my-cars"
+                      className="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all"
+                      onClick={() => setShowDropdown(false)}
+                    >
+                      <span className="material-icons text-xl">directions_car</span>
+                      <span className="font-medium text-sm">My Cars</span>
+                    </Link>
+                  </div>
+                  <div className="border-t border-gray-100 mt-2 pt-2 px-2">
                     <button
                       onClick={handleLogout}
-                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition"
+                      className="w-full flex items-center space-x-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-xl transition-all text-left"
                     >
-                      <div className="flex items-center space-x-2">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                        </svg>
-                        <span>Logout</span>
-                      </div>
+                      <span className="material-icons text-xl">logout</span>
+                      <span className="font-medium text-sm">Logout</span>
                     </button>
                   </div>
                 </div>
@@ -187,7 +172,10 @@ const Header = () => {
           ) : (
             <Link
               to="/login"
-              className="bg-[var(--primary-color)] text-white px-6 py-2 rounded-lg font-semibold hover:bg-[var(--primary-hover-color)] transition-colors"
+              className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all shadow-lg transform hover:-translate-y-0.5 ${isTransparent
+                  ? 'bg-white text-blue-900 hover:bg-gray-100 shadow-black/20'
+                  : 'bg-blue-600 text-white hover:bg-blue-700 shadow-blue-600/30'
+                }`}
             >
               Login / Signup
             </Link>
@@ -196,10 +184,10 @@ const Header = () => {
 
         {/* Mobile Menu Button */}
         <button
-          className={`md:hidden ${isTransparent ? 'text-white' : 'text-gray-800'}`}
+          className={`md:hidden p-2 rounded-xl transition-colors ${isTransparent ? 'text-white hover:bg-white/10' : 'text-gray-800 hover:bg-gray-100'}`}
           onClick={toggleMobileMenu}
         >
-          <span className="material-icons text-2xl">
+          <span className="material-icons text-3xl">
             {isMobileMenuOpen ? 'close' : 'menu'}
           </span>
         </button>
@@ -207,69 +195,94 @@ const Header = () => {
 
       {/* Mobile Navigation */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white shadow-lg border-t">
-          <nav className="container mx-auto px-4 py-4 flex flex-col space-y-4">
+        <div className="md:hidden bg-white shadow-xl border-t border-gray-100 absolute w-full left-0 z-50 animate-fade-in-down">
+          <div className="container mx-auto px-4 py-6 flex flex-col space-y-2">
             <Link
-              className="text-gray-800 hover:text-[var(--primary-color)] transition-colors"
+              className="px-4 py-3 text-gray-700 font-medium hover:bg-gray-50 rounded-xl transition-colors flex items-center gap-3"
               to="/"
               onClick={() => setIsMobileMenuOpen(false)}
             >
+              <span className="material-icons text-gray-400">home</span>
               Home
             </Link>
             <button
-              className="text-gray-800 hover:text-[var(--primary-color)] transition-colors text-left"
+              className="px-4 py-3 text-gray-700 font-medium hover:bg-gray-50 rounded-xl transition-colors text-left flex items-center gap-3"
               onClick={() => {
                 handleSectionClick('how-it-works');
                 setIsMobileMenuOpen(false);
               }}
             >
-              How it Work
+              <span className="material-icons text-gray-400">info</span>
+              How it Works
             </button>
             <Link
-              className="text-gray-800 hover:text-[var(--primary-color)] transition-colors"
+              className="px-4 py-3 text-gray-700 font-medium hover:bg-gray-50 rounded-xl transition-colors flex items-center gap-3"
               to="/become-host"
               onClick={() => setIsMobileMenuOpen(false)}
             >
+              <span className="material-icons text-gray-400">volunteer_activism</span>
               Become a Host
             </Link>
             <button
-              className="text-gray-800 hover:text-[var(--primary-color)] transition-colors text-left"
+              className="px-4 py-3 text-gray-700 font-medium hover:bg-gray-50 rounded-xl transition-colors text-left flex items-center gap-3"
               onClick={() => {
                 handleSectionClick('why-choose-us');
                 setIsMobileMenuOpen(false);
               }}
             >
+              <span className="material-icons text-gray-400">verified</span>
               Why Choose Us
             </button>
+
+            <div className="border-t border-gray-100 my-2 pt-2"></div>
+
             {isAuthenticated && user ? (
               <>
                 <Link
-                  className="text-gray-800 hover:text-[var(--primary-color)] transition-colors"
+                  className="px-4 py-3 text-gray-700 font-medium hover:bg-gray-50 rounded-xl transition-colors flex items-center gap-3"
                   to="/profile"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
+                  <span className="material-icons text-gray-400">person</span>
                   My Profile
                 </Link>
+                <Link
+                  className="px-4 py-3 text-gray-700 font-medium hover:bg-gray-50 rounded-xl transition-colors flex items-center gap-3"
+                  to="/my-bookings"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <span className="material-icons text-gray-400">history</span>
+                  My Bookings
+                </Link>
+                <Link
+                  className="px-4 py-3 text-gray-700 font-medium hover:bg-gray-50 rounded-xl transition-colors flex items-center gap-3"
+                  to="/my-cars"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <span className="material-icons text-gray-400">directions_car</span>
+                  My Cars
+                </Link>
                 <button
-                  className="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors text-center"
+                  className="mt-4 w-full bg-red-50 text-red-600 px-6 py-3 rounded-xl font-bold hover:bg-red-100 transition-colors flex items-center justify-center gap-2"
                   onClick={() => {
                     handleLogout();
                     setIsMobileMenuOpen(false);
                   }}
                 >
+                  <span className="material-icons">logout</span>
                   Logout
                 </button>
               </>
             ) : (
               <Link
                 to="/login"
-                className="bg-[var(--primary-color)] text-white px-6 py-2 rounded-lg font-semibold hover:bg-[var(--primary-hover-color)] transition-colors text-center"
+                className="mt-4 w-full bg-blue-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-700 transition-colors text-center shadow-lg shadow-blue-600/30"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Login / Signup
               </Link>
             )}
-          </nav>
+          </div>
         </div>
       )}
     </header>
