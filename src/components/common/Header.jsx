@@ -118,51 +118,51 @@ const Header = () => {
 
               {/* Dropdown Menu */}
               {showDropdown && (
-                <div className="absolute right-0 mt-3 w-60 bg-white rounded-2xl shadow-xl py-2 z-50 border border-gray-100 transform origin-top-right transition-all">
-                  <div className="px-5 py-3 border-b border-gray-100 bg-gray-50/50 rounded-t-2xl">
-                    <p className="text-sm font-bold text-gray-900">{user.name}</p>
+                <div className="absolute right-0 mt-2 w-52 bg-white rounded-xl shadow-xl py-1.5 z-50 border border-gray-100 transform origin-top-right transition-all">
+                  <div className="px-4 py-2.5 border-b border-gray-100 bg-gray-50/50 rounded-t-xl">
+                    <p className="text-sm font-bold text-gray-900 truncate">{user.name}</p>
                     <p className="text-xs text-gray-500 font-medium truncate">{user.email}</p>
                   </div>
-                  <div className="p-1.5 space-y-0.5">
+                  <div className="p-1 space-y-0.5">
                     <Link
                       to="/profile"
-                      className="flex items-center space-x-3 px-4 py-2.5 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all"
+                      className="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all"
                       onClick={() => setShowDropdown(false)}
                     >
-                      <span className="material-icons text-lg">person</span>
+                      <span className="material-icons text-base">person</span>
                       <span className="font-medium text-sm">My Profile</span>
                     </Link>
                     <Link
                       to="/my-bookings"
-                      className="flex items-center space-x-3 px-4 py-2.5 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all"
+                      className="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all"
                       onClick={() => setShowDropdown(false)}
                     >
-                      <span className="material-icons text-lg">history</span>
+                      <span className="material-icons text-base">history</span>
                       <span className="font-medium text-sm">My Bookings</span>
                     </Link>
                     <Link
                       to="/add-car"
-                      className="flex items-center space-x-3 px-4 py-2.5 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all"
+                      className="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all"
                       onClick={() => setShowDropdown(false)}
                     >
-                      <span className="material-icons text-lg">add_circle</span>
+                      <span className="material-icons text-base">add_circle</span>
                       <span className="font-medium text-sm">List Your Car</span>
                     </Link>
                     <Link
                       to="/my-cars"
-                      className="flex items-center space-x-3 px-4 py-2.5 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all"
+                      className="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all"
                       onClick={() => setShowDropdown(false)}
                     >
-                      <span className="material-icons text-lg">directions_car</span>
+                      <span className="material-icons text-base">directions_car</span>
                       <span className="font-medium text-sm">My Cars</span>
                     </Link>
                   </div>
-                  <div className="border-t border-gray-100 mt-1 pt-1 px-1.5">
+                  <div className="border-t border-gray-100 mt-1 pt-1 px-1">
                     <button
                       onClick={handleLogout}
-                      className="w-full flex items-center space-x-3 px-4 py-2.5 text-red-600 hover:bg-red-50 rounded-xl transition-all text-left"
+                      className="w-full flex items-center space-x-2 px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-all text-left"
                     >
-                      <span className="material-icons text-lg">logout</span>
+                      <span className="material-icons text-base">logout</span>
                       <span className="font-medium text-sm">Logout</span>
                     </button>
                   </div>
