@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/common/Header';
 import authService from '../services/auth';
+import { API_URL } from '../services/api';
 
 const ProfilePage = () => {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const ProfilePage = () => {
       }
 
       try {
-        const response = await fetch('http://localhost:5000/api/auth/me', {
+        const response = await fetch(`${API_URL}/auth/me`, {
           headers: {
             'Authorization': `Bearer ${authService.getToken()}`
           }
@@ -65,7 +66,7 @@ const ProfilePage = () => {
     setMessage({ type: '', text: '' });
 
     try {
-      const response = await fetch('http://localhost:5000/api/users/profile', {
+      const response = await fetch(`${API_URL}/users/profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -189,7 +190,7 @@ const ProfilePage = () => {
           {/* Alert Messages */}
           {message.text && (
             <div className={`mb-8 p-4 rounded-xl flex items-center gap-3 shadow-sm ${message.type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' :
-                'bg-red-50 text-red-800 border border-red-200'
+              'bg-red-50 text-red-800 border border-red-200'
               }`}>
               <span className="material-icons">{message.type === 'success' ? 'check_circle' : 'error'}</span>
               <span className="font-medium">{message.text}</span>
