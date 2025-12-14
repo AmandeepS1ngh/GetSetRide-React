@@ -6,7 +6,7 @@
 // In production, uses full URL
 const isDevelopment = import.meta.env.DEV;
 export const API_URL = import.meta.env.VITE_API_URL || 
-  (isDevelopment ? '/api' : 'https://getsetride-backend.onrender.com/api');
+(isDevelopment ? '/api' : 'https://getsetride-backend.onrender.com/api');
 
 // Helper function to get auth headers
 export const getAuthHeaders = () => {

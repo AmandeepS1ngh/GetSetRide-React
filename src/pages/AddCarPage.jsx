@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/common/Header';
 import authService from '../services/auth';
 import { createCar } from '../services/cars';
+import { uploadSingleImage, deleteImage } from '../services/upload';
 
 const AddCarPage = () => {
   const navigate = useNavigate();
@@ -10,6 +11,9 @@ const AddCarPage = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [imagePreview, setImagePreview] = useState([]);
+  const [uploadingImages, setUploadingImages] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef(null);
 
   const [formData, setFormData] = useState({
     brand: '',
@@ -93,24 +97,116 @@ const AddCarPage = () => {
     }
   };
 
-  const handleImageUrlAdd = (e) => {
-    e.preventDefault();
-    const url = prompt('Enter image URL:');
-    if (url && url.trim()) {
-      setFormData(prev => ({
-        ...prev,
-        imageUrls: [...prev.imageUrls, url.trim()]
-      }));
-      setImagePreview(prev => [...prev, url.trim()]);
+  // Handle file selection
+  const handleFileSelect = async (files) => {
+    if (!files || files.length === 0) return;
+
+    const validFiles = Array.from(files).filter(file => {
+      if (!file.type.startsWith('image/')) {
+        setError('Only image files are allowed');
+        return false;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        setError('File size must be less than 5MB');
+        return false;
+      }
+      return true;
+    });
+
+    if (validFiles.length === 0) return;
+    if (imagePreview.length + validFiles.length > 6) {
+      setError('Maximum 6 images allowed');
+      return;
+    }
+
+    setUploadingImages(true);
+    setError('');
+
+    try {
+      for (const file of validFiles) {
+        // Create local preview immediately
+        const localPreview = URL.createObjectURL(file);
+
+        // Upload to server
+        const response = await uploadSingleImage(file);
+
+        if (response.success) {
+          setFormData(prev => ({
+            ...prev,
+            imageUrls: [...prev.imageUrls, response.data.url]
+          }));
+          setImagePreview(prev => [...prev, {
+            url: response.data.url,
+            publicId: response.data.publicId,
+            localPreview
+          }]);
+        }
+      }
+    } catch (err) {
+      console.error('Upload error:', err);
+      setError(err.message || 'Failed to upload images');
+    } finally {
+      setUploadingImages(false);
+      // Clear the file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
 
-  const handleImageUrlRemove = (index) => {
+  // Handle file input change
+  const handleFileInputChange = (e) => {
+    handleFileSelect(e.target.files);
+  };
+
+  // Drag and drop handlers
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    handleFileSelect(e.dataTransfer.files);
+  };
+
+  // Remove image
+  const handleImageRemove = async (index) => {
+    const image = imagePreview[index];
+
+    // Try to delete from server if we have publicId
+    if (image.publicId) {
+      try {
+        await deleteImage(image.publicId);
+      } catch (err) {
+        console.error('Failed to delete image from server:', err);
+        // Continue with local removal even if server delete fails
+      }
+    }
+
+    // Revoke local preview URL if exists
+    if (image.localPreview) {
+      URL.revokeObjectURL(image.localPreview);
+    }
+
     setFormData(prev => ({
       ...prev,
       imageUrls: prev.imageUrls.filter((_, i) => i !== index)
     }));
     setImagePreview(prev => prev.filter((_, i) => i !== index));
+  };
+
+  // Click to open file dialog
+  const handleUploadClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -514,31 +610,75 @@ const AddCarPage = () => {
                 </div>
 
                 <div className="pl-0 md:pl-14">
-                  <div className="bg-gray-50 border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center mb-6 hover:bg-gray-100 transition-colors cursor-pointer" onClick={handleImageUrlAdd}>
-                    <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <span className="material-icons text-3xl">add_a_photo</span>
+                  {/* Hidden file input */}
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileInputChange}
+                    accept="image/jpeg,image/png,image/webp"
+                    multiple
+                    className="hidden"
+                  />
+
+                  {/* Upload area */}
+                  <div
+                    className={`border-2 border-dashed rounded-2xl p-8 text-center mb-6 transition-all cursor-pointer ${isDragging
+                        ? 'border-blue-500 bg-blue-50'
+                        : 'border-gray-300 bg-gray-50 hover:bg-gray-100 hover:border-gray-400'
+                      } ${uploadingImages ? 'opacity-60 cursor-wait' : ''}`}
+                    onClick={!uploadingImages ? handleUploadClick : undefined}
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                  >
+                    <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${isDragging ? 'bg-blue-200 text-blue-700' : 'bg-blue-100 text-blue-600'
+                      }`}>
+                      {uploadingImages ? (
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                      ) : (
+                        <span className="material-icons text-3xl">
+                          {isDragging ? 'cloud_upload' : 'add_a_photo'}
+                        </span>
+                      )}
                     </div>
-                    <p className="text-lg font-bold text-gray-700">Add an image URL</p>
-                    <p className="text-gray-500 text-sm mt-1">Click to enter URL or drag and drop (coming soon)</p>
+                    <p className="text-lg font-bold text-gray-700">
+                      {uploadingImages ? 'Uploading...' : isDragging ? 'Drop your images here' : 'Upload car images'}
+                    </p>
+                    <p className="text-gray-500 text-sm mt-1">
+                      {uploadingImages
+                        ? 'Please wait while images are uploaded'
+                        : 'Drag and drop or click to select • JPG, PNG, WEBP • Max 5MB each'
+                      }
+                    </p>
+                    <p className="text-xs text-gray-400 mt-2">
+                      {imagePreview.length}/6 images uploaded
+                    </p>
                   </div>
 
+                  {/* Image previews */}
                   {imagePreview.length > 0 && (
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                      {imagePreview.map((url, index) => (
-                        <div key={index} className="relative group rounded-xl overflow-hidden shadow-sm aspect-[4/3]">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
+                      {imagePreview.map((image, index) => (
+                        <div key={index} className="relative group rounded-xl overflow-hidden shadow-md aspect-[4/3] bg-gray-100">
                           <img
-                            src={url}
+                            src={image.url || image.localPreview || image}
                             alt={`Car ${index + 1}`}
                             className="w-full h-full object-cover"
                             onError={(e) => {
-                              e.target.src = 'https://via.placeholder.com/300x200?text=Invalid+Image';
+                              e.target.src = 'https://via.placeholder.com/300x200?text=Image+Error';
                             }}
                           />
-                          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                          {index === 0 && (
+                            <div className="absolute top-2 left-2 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-lg">
+                              Main Photo
+                            </div>
+                          )}
+                          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                             <button
                               type="button"
-                              onClick={() => handleImageUrlRemove(index)}
-                              className="w-10 h-10 bg-white text-red-600 rounded-full flex items-center justify-center hover:bg-red-50 transition-colors"
+                              onClick={() => handleImageRemove(index)}
+                              className="w-10 h-10 bg-white text-red-600 rounded-full flex items-center justify-center hover:bg-red-50 transition-colors shadow-lg"
+                              title="Remove image"
                             >
                               <span className="material-icons">delete</span>
                             </button>
@@ -550,7 +690,7 @@ const AddCarPage = () => {
 
                   <p className="text-sm text-gray-500 flex items-center gap-1">
                     <span className="material-icons text-sm">info</span>
-                    Add at least one high-quality image of your car to get more bookings.
+                    Add at least one high-quality image of your car. The first image will be used as the main photo.
                   </p>
                 </div>
               </section>
@@ -570,8 +710,8 @@ const AddCarPage = () => {
                       <label
                         key={feature}
                         className={`flex items-center p-3 rounded-xl border-2 cursor-pointer transition-all ${formData.features.includes(feature)
-                            ? 'border-blue-500 bg-blue-50/50 shadow-sm'
-                            : 'border-transparent bg-gray-50 hover:bg-gray-100'
+                          ? 'border-blue-500 bg-blue-50/50 shadow-sm'
+                          : 'border-transparent bg-gray-50 hover:bg-gray-100'
                           }`}
                       >
                         <div className={`w-5 h-5 rounded-md border flex items-center justify-center mr-3 transition-colors ${formData.features.includes(feature) ? 'bg-blue-600 border-blue-600' : 'border-gray-400 bg-white'
