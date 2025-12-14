@@ -2,7 +2,8 @@ const API_URL = import.meta.env.VITE_API_URL || 'https://getsetride-backend.onre
 
 // Helper function to get auth headers
 const getAuthHeaders = () => {
-  const token = localStorage.getItem('token');
+  // Try both 'authToken' and 'token' for backward compatibility
+  const token = localStorage.getItem('authToken') || localStorage.getItem('token');
   return {
     'Content-Type': 'application/json',
     ...(token && { 'Authorization': `Bearer ${token}` })
@@ -34,7 +35,7 @@ export const createBooking = async (bookingData) => {
 // Get user's bookings
 export const getMyBookings = async (status) => {
   try {
-    const url = status 
+    const url = status
       ? `${API_URL}/bookings/my-bookings?status=${status}`
       : `${API_URL}/bookings/my-bookings`;
 
@@ -59,7 +60,7 @@ export const getMyBookings = async (status) => {
 // Get host's bookings
 export const getHostBookings = async (status) => {
   try {
-    const url = status 
+    const url = status
       ? `${API_URL}/bookings/host/bookings?status=${status}`
       : `${API_URL}/bookings/host/bookings`;
 
