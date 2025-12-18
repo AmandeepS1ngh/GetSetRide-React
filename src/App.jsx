@@ -13,6 +13,7 @@ import AddCarPage from './pages/AddCarPage';
 import EditCarPage from './pages/EditCarPage';
 import DebugPage from './pages/DebugPage';
 import Footer from './components/common/Footer';
+import Chatbot from './components/common/Chatbot';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path="/debug" element={<DebugPage />} />
         </Routes>
         <Footer />
+        <Chatbot />
       </div>
     </BrowserRouter>
   );
