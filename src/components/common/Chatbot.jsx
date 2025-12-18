@@ -136,7 +136,7 @@ const Chatbot = () => {
     };
 
     const handleCarClick = (carId) => {
-        navigate(`/cars/${carId}`);
+        navigate(`/car/${carId}`);
         setIsOpen(false);
     };
 
